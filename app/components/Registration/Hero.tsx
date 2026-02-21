@@ -231,6 +231,61 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+type Tab = { name: string; path?: string };
+type Feature = { icon: string; text: string };
+
+type TextField = {
+  type: "text";
+  content: string;
+};
+
+type InputField = {
+  type: "input";
+  inputType?: string;
+  name: string;
+  placeholder?: string;
+};
+
+type SelectField = {
+  type: "select";
+  name: string;
+  placeholder?: string;
+  options?: string[];
+};
+
+type CheckboxField = {
+  type: "checkbox";
+  name: string;
+  label: string;
+};
+
+type ColorOptionsField = {
+  type: "color-options";
+  options: { name: string; hex: string }[];
+};
+
+type FormField =
+  | TextField
+  | InputField
+  | SelectField
+  | CheckboxField
+  | ColorOptionsField;
+
+export type RegistrationHeroProps = {
+  heading?: string;
+  headingHighlight?: string;
+  description?: string;
+  features?: Feature[];
+
+  tabs?: Tab[];
+  defaultTab?: string | null;
+  tabDescriptions?: Record<string, string> | null;
+
+  formFields?: FormField[];
+  buttonText?: string;
+  onSubmit?: (data: Record<string, FormDataEntryValue>) => void;
+};
+
 export default function DynamicHeroSection({
   heading,
   headingHighlight,
@@ -241,8 +296,8 @@ export default function DynamicHeroSection({
   tabDescriptions,
   formFields,
   buttonText,
-  onSubmit
-}) {
+  onSubmit,
+}: RegistrationHeroProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(defaultTab || tabs?.[0]?.name);
 
@@ -426,7 +481,7 @@ export default function DynamicHeroSection({
                 onSubmit={(e) => {
                   e.preventDefault();
                   if (onSubmit) {
-                    const formData = new FormData(e.target);
+                    const formData = new FormData(e.target as HTMLFormElement);
                     onSubmit(Object.fromEntries(formData));
                   }
                 }}

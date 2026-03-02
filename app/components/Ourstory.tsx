@@ -42,58 +42,113 @@
 //   );
 // }
 
+// async function getOurStory() {
+//   const res = await fetch(
+//     "https://cms.dostartup.in/api/content/item/ourstory",
+//     { cache: "no-store" }
+//   );
+//   const json = await res.json();
+//   return json;
+// }
+
+// function renderRichText(text: string) {
+//   if (!text) return null;
+
+//   return (
+//     <p className="text-gray-600 text-sm md:text-base leading-relaxed mt-2">
+//       {text}
+//     </p>
+//   );
+// }
+
+// export default async function OurStory() {
+//   const data = await getOurStory();
+
+//   if (!data) return null;
+
+//   // Cockpit uses path not url
+//   const imageUrl = data.image?.path;
+
+//   return (
+//     <section className="bg-white">
+//       <div className="max-w-7xl mx-auto px-6 py-12">
+//         <div className="bg-white border rounded-xl shadow-sm p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center">
+
+//           {/* Left Image */}
+//           <div className="w-full md:w-1/2">
+//             {imageUrl && (
+//               <img
+//                 src={`https://cms.dostartup.in/storage/uploads${imageUrl}`}
+//                 alt="Our Story"
+//                 className="w-full h-auto rounded-lg shadow-sm object-cover"
+//               />
+//             )}
+//           </div>
+
+//           {/* Right Text */}
+//           <div className="w-full md:w-1/2">
+//             <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-3">
+//               {data.title}
+//             </h3>
+
+//             {renderRichText(data.para1)}
+//             {renderRichText(data.para2)}
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
 async function getOurStory() {
+  const baseUrl = process.env.COCKPIT_API_URL;
+  const token = process.env.COCKPIT_API_KEY;
+
   const res = await fetch(
-    "https://cms.dostartup.in/api/content/item/ourstory",
+    `${baseUrl}/api/content/item/ourstory?token=${token}`,
     { cache: "no-store" }
   );
-  const json = await res.json();
-  return json;
-}
 
-function renderRichText(text: string) {
-  if (!text) return null;
+  if (!res.ok) {
+    console.error("Our Story fetch failed:", res.status);
+    throw new Error(`Failed to fetch Our Story: ${res.status}`);
+  }
 
-  return (
-    <p className="text-gray-600 text-sm md:text-base leading-relaxed mt-2">
-      {text}
-    </p>
-  );
+  return res.json();
 }
 
 export default async function OurStory() {
   const data = await getOurStory();
+  const baseUrl = process.env.COCKPIT_API_URL;
 
-  if (!data) return null;
-
-  // Cockpit uses path not url
-  const imageUrl = data.image?.path;
+  const imagePath = data?.image?.path;
 
   return (
     <section className="bg-white">
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="bg-white border rounded-xl shadow-sm p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center">
 
-          {/* Left Image */}
+          {/* Image */}
           <div className="w-full md:w-1/2">
-            {imageUrl && (
+            {imagePath && (
               <img
-                src={`https://cms.dostartup.in/storage/uploads${imageUrl}`}
+                src={`${baseUrl}/storage/uploads${imagePath}`}
                 alt="Our Story"
                 className="w-full h-auto rounded-lg shadow-sm object-cover"
               />
             )}
           </div>
 
-          {/* Right Text */}
+          {/* Text */}
           <div className="w-full md:w-1/2">
             <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-3">
               {data.title}
             </h3>
 
-            {renderRichText(data.para1)}
-            {renderRichText(data.para2)}
+            <p className="text-gray-600 mt-2">{data.para1}</p>
+            <p className="text-gray-600 mt-2">{data.para2}</p>
           </div>
+          
         </div>
       </div>
     </section>

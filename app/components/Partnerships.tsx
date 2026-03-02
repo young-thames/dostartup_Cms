@@ -197,143 +197,200 @@
 
 
 
-"use client";
+// "use client";
 
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
-const COCKPIT_BASE = "https://cms.dostartup.in";
-const PARTNER_API = `${COCKPIT_BASE}/api/content/items/Partner`;
+// const COCKPIT_BASE = "https://cms.dostartup.in";
+// const PARTNER_API = `${COCKPIT_BASE}/api/content/items/Partner`;
 
-export default function Partnerships() {
+// export default function Partnerships() {
 
-  const [partners, setPartners] = useState<any[]>([]);
+//   const [partners, setPartners] = useState<any[]>([]);
 
-  useEffect(() => {
-    fetchPartners();
-  }, []);
+//   useEffect(() => {
+//     fetchPartners();
+//   }, []);
 
-  async function fetchPartners() {
+//   async function fetchPartners() {
 
-    try {
+//     try {
 
-      const res = await fetch(PARTNER_API, {
-        cache: "no-store"
-      });
+//       const res = await fetch(PARTNER_API, {
+//         cache: "no-store"
+//       });
 
-      const data = await res.json();
+//       const data = await res.json();
 
-      if (Array.isArray(data)) {
-        setPartners(data);
-      }
+//       if (Array.isArray(data)) {
+//         setPartners(data);
+//       }
 
-    } catch (error) {
+//     } catch (error) {
 
-      console.error("Partners fetch error:", error);
+//       console.error("Partners fetch error:", error);
 
-    }
+//     }
 
+//   }
+
+//   function getLogoUrl(partner: any) {
+
+//     if (!partner.logo) return "";
+
+//     // CASE 1: Asset object (correct Cockpit format)
+//     if (typeof partner.logo === "object" && partner.logo.path) {
+//       return `${COCKPIT_BASE}/storage/uploads${partner.logo.path}`;
+//     }
+
+//     // CASE 2: String URL
+//     if (typeof partner.logo === "string") {
+
+//       // localhost fix → replace with production base
+//       if (partner.logo.includes("localhost")) {
+//         const filename = partner.logo.split("/uploads/")[1];
+//         return `${COCKPIT_BASE}/storage/uploads/${filename}`;
+//       }
+
+//       return partner.logo;
+//     }
+
+//     return "";
+
+//   }
+
+//   return (
+//     <section className="bg-white">
+
+//       <div className="max-w-7xl mx-auto px-6 py-12">
+
+//         <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
+//           Industry leading partnerships
+//         </h2>
+
+//         <p className="text-gray-600 mt-1 mb-6">
+//           We work with top Indian Institutions to further our shared mission of improving ease of doing business and promoting Entrepreneurship in India.
+//         </p>
+
+//         <div className="bg-white border rounded-xl shadow-sm p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 place-items-center">
+
+//           {partners.map((partner, idx) => {
+
+//             const logoUrl = getLogoUrl(partner);
+
+//             if (!logoUrl) return null;
+
+//             return (
+//               <img
+//                 key={partner._id || idx}
+//                 src={logoUrl}
+//                 alt={partner.Name}
+//                 className="max-h-10 object-contain"
+//               />
+//             );
+
+//           })}
+
+//         </div>
+
+//         <div className="mt-10 relative rounded-xl overflow-hidden">
+
+//           <div className="absolute inset-0 bg-black/70"></div>
+
+//           <div className="relative flex items-center justify-between gap-8 p-8 md:p-12">
+
+//             <div className="text-white max-w-xl">
+
+//               <h3 className="text-lg md:text-xl font-semibold mb-3">
+//                 Enterprise Partnership
+//               </h3>
+
+//               <p className="text-sm md:text-base mb-5 leading-relaxed">
+//                 If you're an independent professional, firm, enterprise client,
+//                 bank, or government organization, we invite you to reach out to
+//                 our Enterprise Partnership Team.
+//               </p>
+
+//               <button className="px-5 py-2.5 bg-pink-600 hover:bg-pink-700 text-white font-medium text-sm rounded-lg shadow transition">
+//                 Get Started
+//               </button>
+
+//             </div>
+
+//             <div className="hidden md:block">
+
+//               <img
+//                 src="/images/hero.webp"
+//                 alt="Enterprise Partnership"
+//                 className="w-110 rounded-lg shadow-lg"
+//               />
+
+//             </div>
+
+//           </div>
+
+//         </div>
+
+//       </div>
+
+//     </section>
+//   );
+
+// }
+interface Partner {
+  _id: string;
+  Name: string;
+  logo?: {
+    path: string;
+  };
+}
+
+async function getPartners(): Promise<Partner[]> {
+  const url = `${process.env.COCKPIT_API_URL}/api/content/items/Partner?api-key=${process.env.COCKPIT_API_KEY}`;
+
+  const res = await fetch(url, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("Cockpit API Error:", errorText);
+    throw new Error(`Cockpit API Error: ${res.status}`);
   }
 
-  function getLogoUrl(partner: any) {
+  return res.json();
+}
 
-    if (!partner.logo) return "";
-
-    // CASE 1: Asset object (correct Cockpit format)
-    if (typeof partner.logo === "object" && partner.logo.path) {
-      return `${COCKPIT_BASE}/storage/uploads${partner.logo.path}`;
-    }
-
-    // CASE 2: String URL
-    if (typeof partner.logo === "string") {
-
-      // localhost fix → replace with production base
-      if (partner.logo.includes("localhost")) {
-        const filename = partner.logo.split("/uploads/")[1];
-        return `${COCKPIT_BASE}/storage/uploads/${filename}`;
-      }
-
-      return partner.logo;
-    }
-
-    return "";
-
-  }
+export default async function Partnerships() {
+  const partners = await getPartners();
 
   return (
-    <section className="bg-white">
-
-      <div className="max-w-7xl mx-auto px-6 py-12">
-
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
-          Industry leading partnerships
+    <section className="py-12 bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4">
+        <h2 className="text-3xl font-bold text-center mb-10">
+          Our Banking Partners
         </h2>
 
-        <p className="text-gray-600 mt-1 mb-6">
-          We work with top Indian Institutions to further our shared mission of improving ease of doing business and promoting Entrepreneurship in India.
-        </p>
-
-        <div className="bg-white border rounded-xl shadow-sm p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 place-items-center">
-
-          {partners.map((partner, idx) => {
-
-            const logoUrl = getLogoUrl(partner);
-
-            if (!logoUrl) return null;
-
-            return (
-              <img
-                key={partner._id || idx}
-                src={logoUrl}
-                alt={partner.Name}
-                className="max-h-10 object-contain"
-              />
-            );
-
-          })}
-
-        </div>
-
-        <div className="mt-10 relative rounded-xl overflow-hidden">
-
-          <div className="absolute inset-0 bg-black/70"></div>
-
-          <div className="relative flex items-center justify-between gap-8 p-8 md:p-12">
-
-            <div className="text-white max-w-xl">
-
-              <h3 className="text-lg md:text-xl font-semibold mb-3">
-                Enterprise Partnership
-              </h3>
-
-              <p className="text-sm md:text-base mb-5 leading-relaxed">
-                If you're an independent professional, firm, enterprise client,
-                bank, or government organization, we invite you to reach out to
-                our Enterprise Partnership Team.
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {partners.map((partner) => (
+            <div
+              key={partner._id}
+              className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center"
+            >
+              {partner.logo?.path && (
+                <img
+                  src={`${process.env.COCKPIT_ASSETS_URL}${partner.logo.path}`}
+                  alt={partner.Name.trim()}
+                  className="h-20 object-contain mb-4"
+                />
+              )}
+              <p className="text-center font-medium">
+                {partner.Name.trim()}
               </p>
-
-              <button className="px-5 py-2.5 bg-pink-600 hover:bg-pink-700 text-white font-medium text-sm rounded-lg shadow transition">
-                Get Started
-              </button>
-
             </div>
-
-            <div className="hidden md:block">
-
-              <img
-                src="/images/hero.webp"
-                alt="Enterprise Partnership"
-                className="w-110 rounded-lg shadow-lg"
-              />
-
-            </div>
-
-          </div>
-
+          ))}
         </div>
-
       </div>
-
     </section>
   );
-
 }

@@ -144,7 +144,6 @@
 //   );
 
 // }
-
 import {
   Briefcase,
   Stamp,
@@ -164,65 +163,59 @@ const ICON_MAP: Record<string, any> = {
   Wallet,
 };
 
-/* ---------------- FETCH SERVICES ---------------- */
-async function getServicesData() {
-  const baseUrl = process.env.COCKPIT_API_URL;
-  const token = process.env.COCKPIT_API_KEY;
-
-  if (!baseUrl || !token) {
-    throw new Error("Cockpit environment variables missing");
-  }
-
-  const API_URL = `${baseUrl}/api/content/items/service?token=${token}`;
-
-  const res = await fetch(API_URL, { cache: "no-store" });
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`Cockpit API Error: ${errorText}`);
-  }
-
-  const data = await res.json();
-
-  // 🔥 IMPORTANT FIX FOR YOUR CASE
-  return Array.isArray(data) ? data : [];
+/* ---------------- INTERFACE ---------------- */
+interface ServicesProps {
+  initialServices: any[];
 }
 
-/* ---------------- COMPONENT ---------------- */
-export default async function ServicesSection() {
-  const services = await getServicesData();
-
+export default function Services({ initialServices = [] }: ServicesProps) {
   return (
-    <section className="bg-white">
-      <div className="max-w-7xl mx-auto px-6 py-12">
+    <section className="bg-white py-12">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* Header Section */}
+        <div className="mb-8">
+          <p className="font-['Sora'] text-[10px] font-semibold tracking-[0.1em] uppercase text-[#B1ADA1] mb-1.5">
+            Expert Solutions
+          </p>
+          <h3 className="font-['Sora'] text-xl md:text-2xl font-semibold text-[#1a1714]">
+            Our Services
+          </h3>
+          <p className="text-[#7a7570] text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
+            We provide expert financial and legal solutions tailored to your business needs, 
+            ensuring growth and compliance at every step.
+          </p>
+        </div>
 
-        <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2">
-          Our Services
-        </h3>
-
-        <p className="text-gray-600 mb-8 text-sm md:text-base">
-          We provide expert financial and legal solutions tailored to your needs.
-        </p>
-
-        <div className="bg-white border rounded-xl shadow-sm p-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {services.map((service: any) => {
-            const Icon = ICON_MAP[service.icon];
+        {/* Services Grid Container */}
+        <div className="bg-white border border-[#B1ADA1]/25 rounded-3xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] p-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+          {initialServices.map((service: any) => {
+            // Match the string from Cockpit to the Lucide component
+            const Icon = ICON_MAP[service.icon] || Briefcase;
 
             return (
               <div
                 key={service._id}
-                className="flex flex-col items-center text-center cursor-pointer hover:bg-slate-50 p-3 rounded transition"
+                className="group flex flex-col items-center text-center cursor-pointer p-4 rounded-2xl transition-all duration-300 hover:bg-[#F9F8F4]"
               >
-                {Icon && (
-                  <Icon className="h-8 w-8 text-blue-600 mb-2" />
-                )}
+                {/* Icon Container */}
+                <div className="p-4 rounded-2xl bg-[#F4F3EE] group-hover:bg-white group-hover:shadow-sm transition-all duration-300 mb-4">
+                  <Icon className="h-7 w-7 text-[#C15F3C]" />
+                </div>
 
-                <span className="text-sm font-medium text-gray-800">
+                <span className="font-['Sora'] text-xs font-semibold text-[#3d3a35] group-hover:text-[#1a1714] transition-colors leading-tight">
                   {service.name}
                 </span>
               </div>
             );
           })}
+        </div>
+
+        {/* Bottom CTA Link */}
+        <div className="mt-8 text-center md:text-right">
+            <button className="text-xs font-['Sora'] font-semibold text-[#C15F3C] hover:text-[#a84e30] flex items-center gap-2 md:ml-auto">
+                View All Services <span>→</span>
+            </button>
         </div>
 
       </div>

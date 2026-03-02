@@ -336,8 +336,8 @@
 //     </section>
 //   );
 
-// }
-interface Partner {
+// }interface PartnershipsProps {
+  interface Partner {
   _id: string;
   Name: string;
   logo?: {
@@ -345,50 +345,63 @@ interface Partner {
   };
 }
 
-async function getPartners(): Promise<Partner[]> {
-  const url = `${process.env.COCKPIT_API_URL}/api/content/items/Partner?api-key=${process.env.COCKPIT_API_KEY}`;
-
-  const res = await fetch(url, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    console.error("Cockpit API Error:", errorText);
-    throw new Error(`Cockpit API Error: ${res.status}`);
-  }
-
-  return res.json();
+interface PartnershipsProps {
+  partners: Partner[];
 }
 
-export default async function Partnerships() {
-  const partners = await getPartners();
+export default function Partnerships({ partners = [] }: PartnershipsProps) {
+  const ASSETS_URL = process.env.NEXT_PUBLIC_COCKPIT_ASSETS_URL;
 
   return (
-    <section className="py-12 bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-10">
-          Our Banking Partners
-        </h2>
+    <section className="py-16 bg-[#F9F8F4]">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* Header Section */}
+        <div className="mb-10 text-center md:text-left">
+          <p className="font-['Sora'] text-[10px] font-semibold tracking-[0.1em] uppercase text-[#B1ADA1] mb-2">
+            Trusted Partners
+          </p>
+          <h2 className="font-['Sora'] text-2xl md:text-3xl font-semibold text-[#1a1714]">
+            Our Banking & Ecosystem Partners
+          </h2>
+        </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        {/* Partners Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {partners.map((partner) => (
             <div
               key={partner._id}
-              className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center"
+              className="group bg-white border border-[#B1ADA1]/20 p-8 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center transition-all duration-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-1"
             >
-              {partner.logo?.path && (
-                <img
-                  src={`${process.env.COCKPIT_ASSETS_URL}${partner.logo.path}`}
-                  alt={partner.Name.trim()}
-                  className="h-20 object-contain mb-4"
-                />
+              {partner.logo?.path ? (
+                <div className="relative h-16 w-full mb-4 flex items-center justify-center">
+                  <img
+                    src={`${ASSETS_URL}${partner.logo.path}`}
+                    alt={partner.Name.trim()}
+                    className="max-h-full max-w-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                  />
+                </div>
+              ) : (
+                <div className="h-16 w-16 bg-[#F4F3EE] rounded-full mb-4 flex items-center justify-center text-[#B1ADA1]">
+                  <span className="text-xs">Logo</span>
+                </div>
               )}
-              <p className="text-center font-medium">
+              
+              <p className="font-['Sora'] text-xs font-semibold text-[#7a7570] group-hover:text-[#C15F3C] transition-colors text-center">
                 {partner.Name.trim()}
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Bottom Trust Line */}
+        <div className="mt-12 pt-8 border-t border-[#B1ADA1]/20 flex flex-wrap justify-center gap-x-8 gap-y-4">
+           {["Secure Integration", "Authorized Channel", "Priority Support"].map((benefit) => (
+             <div key={benefit} className="flex items-center gap-2">
+               <div className="w-1.5 h-1.5 rounded-full bg-[#C15F3C]" />
+               <span className="text-[11px] font-semibold text-[#B1ADA1] uppercase tracking-wider">{benefit}</span>
+             </div>
+           ))}
         </div>
       </div>
     </section>

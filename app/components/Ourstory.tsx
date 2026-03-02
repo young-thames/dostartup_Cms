@@ -99,54 +99,69 @@
 //     </section>
 //   );
 // }
-
-async function getOurStory() {
-  const baseUrl = process.env.COCKPIT_API_URL;
-  const token = process.env.COCKPIT_API_KEY;
-
-  const res = await fetch(
-    `${baseUrl}/api/content/item/ourstory?token=${token}`,
-    { cache: "no-store" }
-  );
-
-  if (!res.ok) {
-    console.error("Our Story fetch failed:", res.status);
-    throw new Error(`Failed to fetch Our Story: ${res.status}`);
-  }
-
-  return res.json();
+interface OurStoryProps {
+  data: {
+    title?: string;
+    para1?: string;
+    para2?: string;
+    image?: {
+      path: string;
+    };
+  } | null;
 }
 
-export default async function OurStory() {
-  const data = await getOurStory();
-  const baseUrl = process.env.COCKPIT_API_URL;
+export default function OurStory({ data }: OurStoryProps) {
+  // Use the Assets URL from your .env.local
+  const ASSETS_URL = process.env.NEXT_PUBLIC_COCKPIT_ASSETS_URL;
 
-  const imagePath = data?.image?.path;
+  // Graceful handling if the CMS data is missing
+  if (!data) return null;
+
+  const imagePath = data.image?.path;
 
   return (
     <section className="bg-white">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="bg-white border rounded-xl shadow-sm p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center">
-
-          {/* Image */}
+        {/* Main Card Container */}
+        <div className="bg-white border rounded-3xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] p-6 md:p-10 flex flex-col md:flex-row gap-10 items-center border-[#B1ADA1]/25">
+          
+          {/* Image Column */}
           <div className="w-full md:w-1/2">
-            {imagePath && (
+            {imagePath ? (
               <img
-                src={`${baseUrl}/storage/uploads${imagePath}`}
+                src={`${ASSETS_URL}${imagePath}`}
                 alt="Our Story"
-                className="w-full h-auto rounded-lg shadow-sm object-cover"
+                className="w-full h-auto rounded-2xl shadow-sm object-cover aspect-[4/3]"
               />
+            ) : (
+              <div className="w-full aspect-[4/3] bg-gray-100 rounded-2xl flex items-center justify-center text-gray-400">
+                No Image Available
+              </div>
             )}
           </div>
 
-          {/* Text */}
+          {/* Text Column */}
           <div className="w-full md:w-1/2">
-            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-3">
-              {data.title}
+            <p className="font-['Sora'] text-[10px] font-semibold tracking-[0.1em] uppercase text-[#B1ADA1] mb-2">
+              Our Story
+            </p>
+            
+            <h3 className="font-['Sora'] text-2xl md:text-3xl font-semibold text-[#1a1714] mb-5 leading-tight">
+              {data.title || "The Journey of DoStartup"}
             </h3>
 
-            <p className="text-gray-600 mt-2">{data.para1}</p>
-            <p className="text-gray-600 mt-2">{data.para2}</p>
+            <div className="space-y-4">
+              <p className="text-sm md:text-base text-[#7a7570] leading-relaxed">
+                {data.para1}
+              </p>
+              <p className="text-sm md:text-base text-[#7a7570] leading-relaxed">
+                {data.para2}
+              </p>
+            </div>
+            
+            <button className="mt-8 inline-flex items-center gap-1.5 font-['Sora'] text-xs font-semibold px-6 py-3 rounded-lg bg-[#C15F3C] text-white hover:bg-[#a84e30] transition-all hover:-translate-y-0.5 shadow-sm">
+              Read Full Story
+            </button>
           </div>
           
         </div>

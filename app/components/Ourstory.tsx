@@ -42,28 +42,23 @@
 //   );
 // }
 
-
-
 async function getOurStory() {
   const res = await fetch(
-    "http://localhost:1337/api/our-story?populate=image",
+    "https://cms.dostartup.in/api/content/item/ourstory",
     { cache: "no-store" }
   );
   const json = await res.json();
-  return json.data;
+  return json;
 }
 
-function renderRichText(blocks: any[]) {
-  return blocks.map((block, i) => (
-    <p
-      key={i}
-      className="text-gray-600 text-sm md:text-base leading-relaxed mt-2"
-    >
-      {block.children.map((child: any, j: number) => (
-        <span key={j}>{child.text}</span>
-      ))}
+function renderRichText(text: string) {
+  if (!text) return null;
+
+  return (
+    <p className="text-gray-600 text-sm md:text-base leading-relaxed mt-2">
+      {text}
     </p>
-  ));
+  );
 }
 
 export default async function OurStory() {
@@ -71,7 +66,8 @@ export default async function OurStory() {
 
   if (!data) return null;
 
-  const imageUrl = data.image?.url;
+  // Cockpit uses path not url
+  const imageUrl = data.image?.path;
 
   return (
     <section className="bg-white">
@@ -82,7 +78,7 @@ export default async function OurStory() {
           <div className="w-full md:w-1/2">
             {imageUrl && (
               <img
-                src={`http://localhost:1337${imageUrl}`}
+                src={`https://cms.dostartup.in/storage/uploads${imageUrl}`}
                 alt="Our Story"
                 className="w-full h-auto rounded-lg shadow-sm object-cover"
               />
@@ -92,7 +88,7 @@ export default async function OurStory() {
           {/* Right Text */}
           <div className="w-full md:w-1/2">
             <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-3">
-              {data.Title}
+              {data.title}
             </h3>
 
             {renderRichText(data.para1)}

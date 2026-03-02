@@ -168,47 +168,41 @@
 
 
 // app/components/Startup/Price.tsx
+// app/components/Startup/Price.tsx
 
 type PricingProps = {
   category?: string;
 };
 
-async function getPricing(category?: string) {
-  // ===== FETCH PRICING SECTION =====
+const COCKPIT_BASE = "https://cms.dostartup.in";
+
+async function getPricing() {
+
+  // ===== FETCH PRICING SECTION (Singleton) =====
   const sectionRes = await fetch(
-    category
-      ? `http://localhost:1337/api/pricing-sections?filters[category][$eq]=${category}`
-      : `http://localhost:1337/api/pricing-sections`,
+    `${COCKPIT_BASE}/api/content/item/pricingSection`,
     { cache: "no-store" }
   );
 
-  const sectionJson = await sectionRes.json();
+  const section = await sectionRes.json();
 
-  if (!Array.isArray(sectionJson.data) || sectionJson.data.length === 0) {
-    return null;
-  }
-
-  // category passed → same
-  // no category → first section = default
-  const section = sectionJson.data[0];
-  const finalCategory = section.category;
-
-  // ===== FETCH PRICING CARDS =====
-  const cardsRes = await fetch(
-    `http://localhost:1337/api/pricing-cards?filters[category][$eq]=${finalCategory}`,
+  // ===== FETCH PRICING CARD (Singleton) =====
+  const cardRes = await fetch(
+    `${COCKPIT_BASE}/api/content/item/pricingCard`,
     { cache: "no-store" }
   );
 
-  const cardsJson = await cardsRes.json();
+  const card = await cardRes.json();
 
   return {
     section,
-    cards: Array.isArray(cardsJson.data) ? cardsJson.data : [],
+    cards: card ? [card] : [],
   };
 }
 
 export default async function PricingSection({ category }: PricingProps) {
-  const data = await getPricing(category);
+
+  const data = await getPricing();
 
   if (!data) return null;
 
@@ -223,9 +217,11 @@ export default async function PricingSection({ category }: PricingProps) {
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             {section.heading}
           </h2>
+
           <p className="text-gray-600 text-base sm:text-lg mb-2">
             {section.subheading}
           </p>
+
           {section.note && (
             <p className="text-sm text-gray-500 font-medium">
               {section.note}
@@ -235,9 +231,10 @@ export default async function PricingSection({ category }: PricingProps) {
 
         {/* ===== PRICING CARDS (UNCHANGED) ===== */}
         <div className="flex flex-wrap justify-center gap-6 max-w-6xl mx-auto">
+
           {cards.map((card: any) => (
             <div
-              key={card.id}
+              key={card._id}
               className="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 overflow-hidden group w-full max-w-xs"
             >
               <div className="p-5 pb-3 text-center border-b border-gray-100">
@@ -253,45 +250,17 @@ export default async function PricingSection({ category }: PricingProps) {
                 <div className="text-3xl font-bold text-gray-900 mb-1">
                   ₹{card.price}
                 </div>
-                {card.gstNote && (
-                  <p className="text-xs text-gray-500 font-medium">
-                    {card.gstNote}
-                  </p>
-                )}
               </div>
 
               <div className="px-5 pb-5">
-  <button className="w-full bg-blue-600 text-white text-xs font-semibold py-2.5 rounded-lg hover:bg-blue-700 transition-all shadow-md hover:shadow-lg">
-    {card.buttonText}
-  </button>
-</div>
-
-
-              <div className="px-5 pb-5 space-y-2.5">
-                {Array.isArray(card.features) &&
-                  card.features.map((feature: string, index: number) => (
-                    <div key={index} className="flex items-start gap-2.5">
-                      <svg
-                        className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-xs text-gray-700">
-                        {feature}
-                      </span>
-                    </div>
-                  ))}
+                <button className="w-full bg-blue-600 text-white text-xs font-semibold py-2.5 rounded-lg hover:bg-blue-700 transition-all shadow-md hover:shadow-lg">
+                  Start Filing Now
+                </button>
               </div>
+
             </div>
           ))}
+
         </div>
 
       </div>

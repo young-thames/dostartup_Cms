@@ -337,7 +337,9 @@
 //   );
 
 // }interface PartnershipsProps {
-  interface Partner {
+ 
+
+interface Partner {
   _id: string;
   Name: string;
   logo?: {
@@ -371,14 +373,14 @@ export default function Partnerships({ partners = [] }: PartnershipsProps) {
           {partners.map((partner) => (
             <div
               key={partner._id}
-              className="group bg-white border border-[#B1ADA1]/20 p-8 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center transition-all duration-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-1"
+              className="group bg-white border border-[#B1ADA1]/20 p-8 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center transition-all duration-300"
             >
               {partner.logo?.path ? (
                 <div className="relative h-16 w-full mb-4 flex items-center justify-center">
                   <img
                     src={`${ASSETS_URL}${partner.logo.path}`}
                     alt={partner.Name.trim()}
-                    className="max-h-full max-w-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                    className="max-h-full max-w-full object-contain"
                   />
                 </div>
               ) : (
@@ -387,7 +389,7 @@ export default function Partnerships({ partners = [] }: PartnershipsProps) {
                 </div>
               )}
               
-              <p className="font-['Sora'] text-xs font-semibold text-[#7a7570] group-hover:text-[#C15F3C] transition-colors text-center">
+              <p className="font-['Sora'] text-xs font-semibold text-[#7a7570] transition-colors text-center">
                 {partner.Name.trim()}
               </p>
             </div>
@@ -396,12 +398,14 @@ export default function Partnerships({ partners = [] }: PartnershipsProps) {
 
         {/* Bottom Trust Line */}
         <div className="mt-12 pt-8 border-t border-[#B1ADA1]/20 flex flex-wrap justify-center gap-x-8 gap-y-4">
-           {["Secure Integration", "Authorized Channel", "Priority Support"].map((benefit) => (
-             <div key={benefit} className="flex items-center gap-2">
-               <div className="w-1.5 h-1.5 rounded-full bg-[#C15F3C]" />
-               <span className="text-[11px] font-semibold text-[#B1ADA1] uppercase tracking-wider">{benefit}</span>
-             </div>
-           ))}
+          {["Secure Integration", "Authorized Channel", "Priority Support"].map((benefit) => (
+            <div key={benefit} className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#C15F3C]" />
+              <span className="text-[11px] font-semibold text-[#B1ADA1] uppercase tracking-wider">
+                {benefit}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

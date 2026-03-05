@@ -5,10 +5,11 @@ import { FiSearch, FiMenu, FiX, FiChevronDown } from "react-icons/fi";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openMobileMenu, setOpenMobileMenu] = useState(null);
+  // const [openMobileMenu, setOpenMobileMenu] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [openMobileMenu, setOpenMobileMenu] = useState<string | null>(null);
 
-  const toggleMobileMenu = (name) => {
+  const toggleMobileMenu = (name: string) => {
     setOpenMobileMenu(openMobileMenu === name ? null : name);
   };
 
@@ -37,7 +38,7 @@ export default function Navbar() {
                   { label: "One Person Company", url: "/one-person-company" },
                   { label: "Limited Liability Partnership", url: "/llp-registartion" },
                   { label: "Private Limited Company", url: "/company-registration" },
-                ],[
+                ], [
                   { label: "Section 8 Company", url: "/section-8-company-registration" },
                   { label: "Trust Registration", url: "/trust-registration" },
                   { label: "Public Limited Company", url: "/public-limited-company" },
@@ -144,23 +145,130 @@ export default function Navbar() {
                 ))}
               </div>
             </li>
-
             {/* INCOME TAX */}
             <li className="relative group">
-              <a href="#" className="relative transition-colors duration-200 hover:text-[#C15F3C] after:content-[''] after:block after:h-0.5 after:w-0 after:bg-[#C15F3C] after:transition-all after:duration-300 group-hover:after:w-full after:absolute after:-bottom-1 after:left-0 whitespace-nowrap">Income Tax</a>
-              <div className="absolute top-full left-0 mt-2 border border-[#B1ADA1]/30 shadow-lg rounded-xl w-[320px] p-4 grid grid-rows-7 grid-flow-col gap-x-5 gap-y-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" style={{ backgroundColor: "#F4F3EE" }}>
-                {["Income Tax E-Filing","Business Tax Filing","ITR-1 Return Filing","ITR-2 Return Filing","ITR-3 Return Filing","ITR-4 Return Filing","ITR-5 Return Filing","ITR-6 Return Filing","ITR-7 Return Filing","15CA - 15CB Filing","TAN Registration","TDS Return Filing","Income Tax Notice"].map((item, idx) => (
-                  <a key={idx} href="#" className="text-xs font-normal text-gray-700 px-2 py-1.5 rounded-lg hover:bg-[#B1ADA1]/20 hover:text-[#C15F3C] whitespace-nowrap block transition-colors duration-150">{item}</a>
+              <span className="relative cursor-pointer transition-colors duration-200 hover:text-[#C15F3C] after:content-[''] after:block after:h-0.5 after:w-0 after:bg-[#C15F3C] after:transition-all after:duration-300 group-hover:after:w-full after:absolute after:-bottom-1 after:left-0 whitespace-nowrap">
+                Income Tax
+              </span>
+
+              <div
+                className="absolute top-full left-0 mt-2 border border-[#B1ADA1]/30 shadow-lg rounded-xl w-[320px] p-4 grid grid-rows-7 grid-flow-col gap-x-5 gap-y-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+                style={{ backgroundColor: "#F4F3EE" }}
+              >
+                {[
+                  { label: "Income Tax E-Filing", url: "/income-tax-efiling" },
+                  { label: "Business Tax Filing", url: "/business-tax-filing" },
+                  { label: "ITR-1 Return Filing", url: "/itr-1-return-filing" },
+                  { label: "ITR-2 Return Filing", url: "/itr-2-return-filing" },
+                  { label: "ITR-3 Return Filing", url: "/itr-3-return-filing" },
+                  { label: "ITR-4 Return Filing", url: "/itr-4-return-filing" },
+                  { label: "ITR-5 Return Filing", url: "/itr-5-return-filing" },
+                  { label: "ITR-6 Return Filing", url: "/itr-6-return-filing" },
+                  { label: "ITR-7 Return Filing", url: "/itr-7-return-filing" },
+                  { label: "15CA - 15CB Filing", url: "/15ca-15cb-filing" },
+                  { label: "TAN Registration", url: "/tan-registration" },
+                  { label: "TDS Return Filing", url: "/tds-return-filing" },
+                  { label: "Income Tax Notice", url: "/income-tax-notice" },
+                ].map((item) => (
+                  <Link
+                    key={item.url}
+                    href={item.url}
+                    className="text-xs font-normal text-gray-700 px-2 py-1.5 rounded-lg hover:bg-[#B1ADA1]/20 hover:text-[#C15F3C] whitespace-nowrap block transition-colors duration-150"
+                  >
+                    {item.label}
+                  </Link>
                 ))}
               </div>
             </li>
 
-            {/* Remaining */}
+            {/* MCA */}
+            <li className="relative group">
+              <span className="relative cursor-pointer transition-colors duration-200 hover:text-[#C15F3C] after:content-[''] after:block after:h-0.5 after:w-0 after:bg-[#C15F3C] after:transition-all after:duration-300 group-hover:after:w-full after:absolute after:-bottom-1 after:left-0 whitespace-nowrap">
+                MCA
+              </span>
+
+              <div
+                className="absolute top-full left-0 mt-3 bg-[#F4F3EE] border border-[#B1ADA1]/30 shadow-xl rounded-2xl w-[720px] p-6 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+              >
+                <div className="grid grid-cols-3 gap-x-10 gap-y-3">
+                  {[
+                    { label: "ADT-1 Filing", url: "/mca/adt-1-filing" },
+                    { label: "AOA Amendment", url: "/mca/aoa-amendment" },
+                    { label: "Authorized Capital Increase", url: "/mca/authorized-capital-increase" },
+                    { label: "Commencement INC-20A", url: "/mca/commencement-inc-20a" },
+                    { label: "Company Compliance", url: "/mca/company-compliance" },
+                    { label: "Demat of Shares", url: "/mca/demat-of-shares" },
+                    { label: "DIN eKYC Filing", url: "/mca/din-ekyc-filing" },
+                    { label: "DIN Reactivation", url: "/mca/din-reactivation" },
+                    { label: "Director Change", url: "/mca/director-change" },
+                    { label: "Dormant Status Filing", url: "/mca/dormant-status-filing" },
+                    { label: "DPT-3 Filing", url: "/mca/dpt-3-filing" },
+                    { label: "LLP Compliance", url: "/mca/llp-compliance" },
+                    { label: "LLP Form 11 Filing", url: "/mca/llp-form-11-filing" },
+                    { label: "MOA Amendment", url: "/mca/moa-amendment" },
+                    { label: "Name Change Company", url: "/mca/name-change-company" },
+                    { label: "OPC Compliance", url: "/mca/opc-compliance" },
+                    { label: "Registered Office Change", url: "/mca/registered-office-change" },
+                    { label: "Remove Director", url: "/mca/remove-director" },
+                    { label: "Share Transfer", url: "/mca/share-transfer" },
+                    { label: "Winding Up LLP", url: "/mca/winding-up-llp" },
+                    { label: "Windup Company", url: "/mca/windup-company" },
+                  ].map((item) => (
+                    <Link
+                      key={item.url}
+                      href={item.url}
+                      className="text-xs font-normal text-gray-700 px-2 py-1.5 rounded-lg hover:bg-[#B1ADA1]/20 hover:text-[#C15F3C] whitespace-nowrap block transition-colors duration-150"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </li>
+
+            {/* Compliance */}
+            <li className="relative group">
+              <span className="relative cursor-pointer transition-colors duration-200 hover:text-[#C15F3C] after:content-[''] after:block after:h-0.5 after:w-0 after:bg-[#C15F3C] after:transition-all after:duration-300 group-hover:after:w-full after:absolute after:-bottom-1 after:left-0 whitespace-nowrap">
+                Compliance
+              </span>
+
+              <div
+                className="absolute top-full left-0 mt-3 bg-[#F4F3EE] border border-[#B1ADA1]/30 shadow-xl rounded-2xl w-[720px] p-6 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+              >
+                <div className="grid grid-cols-3 gap-x-10 gap-y-3">
+                  {[
+                    { label: "Bookkeeping", url: "/compliance/bookkeeping" },
+                    { label: "Business Plan", url: "/compliance/business-plan" },
+                    { label: "CA Support", url: "/compliance/ca-support" },
+                    { label: "ESI Return Filing", url: "/compliance/esi-return-filing" },
+                    { label: "FDI Filing RBI", url: "/compliance/fdi-filing-rbi" },
+                    { label: "FLA Return Filing", url: "/compliance/fla-return-filing" },
+                    { label: "FSSAI Renewal", url: "/compliance/fssai-renewal" },
+                    { label: "FSSAI Return Filing", url: "/compliance/fssai-return-filing" },
+                    { label: "HR Payroll", url: "/compliance/hr-payroll" },
+                    { label: "Partnership Compliance", url: "/compliance/partnership-compliance" },
+                    { label: "PF Return Filing", url: "/compliance/pf-return-filing" },
+                    { label: "Professional Tax Return Filing", url: "/compliance/professional-tax-return-filing" },
+                    { label: "Proprietorship Compliance", url: "/compliance/proprietorship-compliance" },
+                  ].map((item) => (
+                    <Link
+                      key={item.url}
+                      href={item.url}
+                      className="text-xs font-normal text-gray-700 px-2 py-1.5 rounded-lg hover:bg-[#B1ADA1]/20 hover:text-[#C15F3C] whitespace-nowrap block transition-colors duration-150"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </li>
+
+            {/* Remaining
             {["MCA","Compliance","Personal","Global","Cities","Guides"].map((item, idx) => (
               <li key={idx}>
                 <a href="#" className="relative transition-colors duration-200 hover:text-[#C15F3C] after:content-[''] after:block after:h-0.5 after:w-0 after:bg-[#C15F3C] after:transition-all after:duration-300 hover:after:w-full after:absolute after:-bottom-1 after:left-0 whitespace-nowrap">{item}</a>
               </li>
-            ))}
+            ))} */}
           </ul>
         </div>
 
@@ -206,86 +314,96 @@ export default function Navbar() {
           {/* Accordion items */}
           <ul>
             {[
-              { name: "startup", label: "Startup", links: [
-                { label: "Proprietorship", url: "/proprietorship" },
-                { label: "Partnership", url: "/partnership" },
-                { label: "One Person Company", url: "/one-person-company" },
-                { label: "Limited Liability Partnership", url: "/llp-registartion" },
-                { label: "Private Limited Company", url: "/company-registration" },
-                { label: "Section 8 Company", url: "/section-8-company-registration" },
-                { label: "Trust Registration", url: "/trust-registration" },
-                { label: "Public Limited Company", url: "/public-limited-company" },
-                { label: "Producer Company", url: "/producer-company-registration" },
-                { label: "Indian Subsidiary", url: "/indian-subsidiary" },
-              ]},
-              { name: "registrations", label: "Registrations", links: [
-                { label: "Startup India", url: "/start-up-india" },
-                { label: "Trade License", url: "/trade-license" },
-                { label: "FSSAI Registration", url: "/fssai" },
-                { label: "FSSAI License", url: "/fssai-license" },
-                { label: "Halal License & Certification", url: "/halal-certificate" },
-                { label: "ICEGATE Registration", url: "/icegate-registration" },
-                { label: "Import Export Code", url: "/import-export-code" },
-                { label: "Legal Entity Identifier Code", url: "/lei-code" },
-                { label: "ISO Registration", url: "/iso-registration" },
-                { label: "PF Registration", url: "/pf-registration" },
-                { label: "ESI Registration", url: "/esi-registration" },
-                { label: "Professional Tax Registration", url: "/professional-tax-registration" },
-                { label: "RCMC Registration", url: "/rcmc-registration" },
-                { label: "TN RERA Registration for Agents", url: "/rera-registration-agents" },
-                { label: "12A and 80G Registration", url: "/12a-80g-registration" },
-                { label: "12A Registration", url: "/12a-registration" },
-                { label: "80G Registration", url: "/80g-registration" },
-                { label: "APEDA Registration", url: "/apeda-registration" },
-                { label: "Barcode Registration", url: "/barcode-registration" },
-                { label: "BIS Registration", url: "/bis-certification" },
-                { label: "Certificate of Incumbency", url: "/certificate-incumbency" },
-                { label: "Darpan Registration", url: "/darpan-registration" },
-                { label: "Digital Signature", url: "/digital-signature" },
-                { label: "Shop Act Registration", url: "/shop-establishment-act-registration" },
-                { label: "Drug License", url: "/drug-license" },
-                { label: "Udyam Registration", url: "/udyam-registration" },
-                { label: "FCRA Registration", url: "/fcra-registration" },
-                { label: "Fire License", url: "/fire-license" },
-              ]},
-              { name: "trademark", label: "Trademark", links: [
-                { label: "Trademark Registration", url: "/trademark-registration" },
-                { label: "Trademark Objection", url: "/trademark-objection" },
-                { label: "Trademark Certificate", url: "/trademark-registration-certificate" },
-                { label: "Trademark Opposition", url: "/trademark-opposition" },
-                { label: "Trademark Hearing", url: "/trademark-hearing" },
-                { label: "Trademark Rectification", url: "/trademark-rectification" },
-                { label: "TM Infringement Notice", url: "/trademark-infringement-notice" },
-                { label: "Trademark Renewal", url: "/trademark-renewal" },
-                { label: "Trademark Transfer", url: "/trademark-transfer" },
-                { label: "Expedited TM Registration", url: "/expedited-tm-registration" },
-                { label: "Logo Designing", url: "/logo-designing" },
-                { label: "Design Registration", url: "/design-registration" },
-                { label: "Design Objection", url: "/design-objection" },
-                { label: "Copyright Registration", url: "/copyright-registration" },
-                { label: "Copyright Objection", url: "/copyright-objection" },
-                { label: "Patent Registration", url: "/patent-registration" },
-                { label: "Trademark Protection", url: "/trademark-protection" },
-              ]},
-              { name: "gst", label: "GST", links: [
-                { label: "GST Registration", url: "/gst-registration" },
-                { label: "GST Return Filing by Accountant", url: "/gst-return-filing" },
-                { label: "GST NIL Return Filing", url: "/gst-return-filing-nil-filing" },
-                { label: "GST E-Invoicing Software", url: "/gst-einvoice" },
-                { label: "GST LUT Form", url: "/gst-lut" },
-                { label: "GST Notice", url: "/gst-notice" },
-                { label: "GST Annual Return Filing (GSTR-9)", url: "/gst-annual-return" },
-                { label: "GST Registration for Foreigners", url: "/gst-registration-for-foreigners" },
-                { label: "GST Invoicing & Filing Software", url: "/gst-software" },
-                { label: "GST Amendment", url: "/gst-amendment" },
-                { label: "GST Revocation", url: "/gst-revocation" },
-                { label: "GSTR-10", url: "/gstr-10" },
-                { label: "GST Software for Accountants", url: "/ledgers-pro" },
-                { label: "Virtual Office + GSTIN", url: "/virtual-office" },
-              ]},
-              { name: "incometax", label: "Income Tax", links: [
-                "Income Tax E-Filing","Business Tax Filing","ITR-1 Return Filing","ITR-2 Return Filing","ITR-3 Return Filing","ITR-4 Return Filing","ITR-5 Return Filing","ITR-6 Return Filing","ITR-7 Return Filing","15CA - 15CB Filing","TAN Registration","TDS Return Filing","Income Tax Notice"
-              ].map(l => ({ label: l, url: "#" }))},
+              {
+                name: "startup", label: "Startup", links: [
+                  { label: "Proprietorship", url: "/proprietorship" },
+                  { label: "Partnership", url: "/partnership" },
+                  { label: "One Person Company", url: "/one-person-company" },
+                  { label: "Limited Liability Partnership", url: "/llp-registartion" },
+                  { label: "Private Limited Company", url: "/company-registration" },
+                  { label: "Section 8 Company", url: "/section-8-company-registration" },
+                  { label: "Trust Registration", url: "/trust-registration" },
+                  { label: "Public Limited Company", url: "/public-limited-company" },
+                  { label: "Producer Company", url: "/producer-company-registration" },
+                  { label: "Indian Subsidiary", url: "/indian-subsidiary" },
+                ]
+              },
+              {
+                name: "registrations", label: "Registrations", links: [
+                  { label: "Startup India", url: "/start-up-india" },
+                  { label: "Trade License", url: "/trade-license" },
+                  { label: "FSSAI Registration", url: "/fssai" },
+                  { label: "FSSAI License", url: "/fssai-license" },
+                  { label: "Halal License & Certification", url: "/halal-certificate" },
+                  { label: "ICEGATE Registration", url: "/icegate-registration" },
+                  { label: "Import Export Code", url: "/import-export-code" },
+                  { label: "Legal Entity Identifier Code", url: "/lei-code" },
+                  { label: "ISO Registration", url: "/iso-registration" },
+                  { label: "PF Registration", url: "/pf-registration" },
+                  { label: "ESI Registration", url: "/esi-registration" },
+                  { label: "Professional Tax Registration", url: "/professional-tax-registration" },
+                  { label: "RCMC Registration", url: "/rcmc-registration" },
+                  { label: "TN RERA Registration for Agents", url: "/rera-registration-agents" },
+                  { label: "12A and 80G Registration", url: "/12a-80g-registration" },
+                  { label: "12A Registration", url: "/12a-registration" },
+                  { label: "80G Registration", url: "/80g-registration" },
+                  { label: "APEDA Registration", url: "/apeda-registration" },
+                  { label: "Barcode Registration", url: "/barcode-registration" },
+                  { label: "BIS Registration", url: "/bis-certification" },
+                  { label: "Certificate of Incumbency", url: "/certificate-incumbency" },
+                  { label: "Darpan Registration", url: "/darpan-registration" },
+                  { label: "Digital Signature", url: "/digital-signature" },
+                  { label: "Shop Act Registration", url: "/shop-establishment-act-registration" },
+                  { label: "Drug License", url: "/drug-license" },
+                  { label: "Udyam Registration", url: "/udyam-registration" },
+                  { label: "FCRA Registration", url: "/fcra-registration" },
+                  { label: "Fire License", url: "/fire-license" },
+                ]
+              },
+              {
+                name: "trademark", label: "Trademark", links: [
+                  { label: "Trademark Registration", url: "/trademark-registration" },
+                  { label: "Trademark Objection", url: "/trademark-objection" },
+                  { label: "Trademark Certificate", url: "/trademark-registration-certificate" },
+                  { label: "Trademark Opposition", url: "/trademark-opposition" },
+                  { label: "Trademark Hearing", url: "/trademark-hearing" },
+                  { label: "Trademark Rectification", url: "/trademark-rectification" },
+                  { label: "TM Infringement Notice", url: "/trademark-infringement-notice" },
+                  { label: "Trademark Renewal", url: "/trademark-renewal" },
+                  { label: "Trademark Transfer", url: "/trademark-transfer" },
+                  { label: "Expedited TM Registration", url: "/expedited-tm-registration" },
+                  { label: "Logo Designing", url: "/logo-designing" },
+                  { label: "Design Registration", url: "/design-registration" },
+                  { label: "Design Objection", url: "/design-objection" },
+                  { label: "Copyright Registration", url: "/copyright-registration" },
+                  { label: "Copyright Objection", url: "/copyright-objection" },
+                  { label: "Patent Registration", url: "/patent-registration" },
+                  { label: "Trademark Protection", url: "/trademark-protection" },
+                ]
+              },
+              {
+                name: "gst", label: "GST", links: [
+                  { label: "GST Registration", url: "/gst-registration" },
+                  { label: "GST Return Filing by Accountant", url: "/gst-return-filing" },
+                  { label: "GST NIL Return Filing", url: "/gst-return-filing-nil-filing" },
+                  { label: "GST E-Invoicing Software", url: "/gst-einvoice" },
+                  { label: "GST LUT Form", url: "/gst-lut" },
+                  { label: "GST Notice", url: "/gst-notice" },
+                  { label: "GST Annual Return Filing (GSTR-9)", url: "/gst-annual-return" },
+                  { label: "GST Registration for Foreigners", url: "/gst-registration-for-foreigners" },
+                  { label: "GST Invoicing & Filing Software", url: "/gst-software" },
+                  { label: "GST Amendment", url: "/gst-amendment" },
+                  { label: "GST Revocation", url: "/gst-revocation" },
+                  { label: "GSTR-10", url: "/gstr-10" },
+                  { label: "GST Software for Accountants", url: "/ledgers-pro" },
+                  { label: "Virtual Office + GSTIN", url: "/virtual-office" },
+                ]
+              },
+              {
+                name: "incometax", label: "Income Tax", links: [
+                  "Income Tax E-Filing", "Business Tax Filing", "ITR-1 Return Filing", "ITR-2 Return Filing", "ITR-3 Return Filing", "ITR-4 Return Filing", "ITR-5 Return Filing", "ITR-6 Return Filing", "ITR-7 Return Filing", "15CA - 15CB Filing", "TAN Registration", "TDS Return Filing", "Income Tax Notice"
+                ].map(l => ({ label: l, url: "#" }))
+              },
             ].map(({ name, label, links }) => (
               <li key={name} className="border-b" style={{ borderColor: "rgba(177,173,161,0.2)" }}>
                 <button className="w-full flex items-center justify-between px-4 py-3.5 text-sm font-semibold transition-colors" style={{ color: "#3d3a35" }} onClick={() => toggleMobileMenu(name)}>
@@ -303,7 +421,7 @@ export default function Navbar() {
             ))}
 
             {/* Simple items */}
-            {["MCA","Compliance","Personal","Global","Cities","Guides"].map((item, idx) => (
+            {["MCA", "Compliance", "Personal", "Global", "Cities", "Guides"].map((item, idx) => (
               <li key={idx} className="border-b" style={{ borderColor: "rgba(177,173,161,0.2)" }}>
                 <a href="#" className="flex items-center px-4 py-3.5 text-sm font-semibold transition-colors hover:text-[#C15F3C]" style={{ color: "#3d3a35" }} onClick={() => setMobileOpen(false)}>{item}</a>
               </li>
